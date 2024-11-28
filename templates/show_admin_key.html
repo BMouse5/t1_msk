@@ -1,0 +1,102 @@
+<!-- show_admin_key.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ключ администратора</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script>
+        setTimeout(function() {
+            window.location.href = "/chat/{{ chat_id }}?admin_key={{ admin_key }}";
+        }, 5000);
+    </script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center; /* Горизонтальное центрирование */
+            align-items: center;    /* Вертикальное центрирование */
+            height: 100vh;          /* Высота окна браузера */
+            background-color: #f0f0f0; /* Светлый фон для наглядности */
+        }
+        .key-wrapp {
+            text-align: center;      /* Центрирование текста внутри блока */
+            background: #fff;       /* Белый фон блока */
+            padding: 20px;          /* Внутренние отступы */
+            border-radius: 8px;     /* Скругленные углы */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Тень для эффекта */
+        }
+
+         strong {
+            position: relative;
+            cursor: pointer;
+            color: #00aae6;
+        }
+
+        strong::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; /* Расстояние от текста */
+            left: 50%; /* Центрируем линию */
+            width: 0; /* Начальная ширина 0 */
+            height: 2px; /* Высота линии */
+            background-color: #00aae6; /* Цвет линии */
+            transition: width 0.4s ease, left 0.4s ease; /* Плавное изменение */
+        }
+
+        strong:hover::after {
+            width: 100%; /* При наведении линия расширяется */
+            left: 0; /* Линия растягивается от центра в стороны */
+        }
+
+        .tooltip {
+            position: absolute;
+            top: -30px; /* Расположение уведомления над текстом */
+            left: 50%;
+            transform: translateX(-50%);
+            background: #007BFF; /* Синий фон уведомления */
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            white-space: nowrap;
+            opacity: 0; /* Начальное состояние — скрыто */
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .tooltip.show {
+            opacity: 1; /* Показываем уведомление */
+        }
+    </style>
+</head>
+<body>
+    <div class="key-wrapp" style="position: relative;"> <!-- Убедитесь в relative -->
+    <h1>Ваш ключ администратора:</h1>
+    <p><strong id="adminKey">{{ admin_key }}</strong></p>
+    <div class="tooltip" id="copyTooltip">Текст скопирован!</div>
+    <p>Через 5 секунд вы будете автоматически перенаправлены в чат.</p>
+</div>
+
+<script>
+    const adminKeyElement = document.getElementById('adminKey');
+    const tooltip = document.getElementById('copyTooltip');
+
+    adminKeyElement.addEventListener('click', async () => {
+        const textToCopy = adminKeyElement.textContent;
+        try {
+            await navigator.clipboard.writeText(textToCopy);
+            tooltip.classList.add('show'); // Показываем всплывающее уведомление
+            setTimeout(() => {
+                tooltip.classList.remove('show'); // Скрываем уведомление
+            }, 2000);
+        } catch (err) {
+            console.error('Ошибка при копировании:', err);
+        }
+    });
+</script>
+
+</body>
+</html>

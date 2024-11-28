@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Чат {{ chat_id }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        /* Стили */
+        @font-face {
+            font-family: 'CustomFont';
+            src: url('{{ settings.font_url }}');
+        }
+
+        input {
+            outline: none;
+        }
+
+        .messages-container {
+            background-color: {{ settings.bg_color | default('#ffffff') }};
+            font-family: {{ "'CustomFont', sans-serif" if settings.font_url else "sans-serif" }};
+            margin: 0;
+            padding: 0;
+        }
+
+        .view-head {
+            background-color: {{ settings.header_color | default('#007bff') }};
+            color: white;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        #chat-header img {
+            height: 50px;
+            margin-right: 20px;
+        }
+
+        #chat-header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        #chat-title {
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            padding: 10px;
+        }
+
+        #style-editor {
+            width: 80%;
+            padding: 20px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            margin: 0 auto;
+        }
+
+        .parametrs {
+            margin-bottom: 15px;
+        }
+
+        .parametrs h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .parametrs input[type="text"]
+
+         {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 15px;
+            border: 1px solid #ccc;
+        }
+
+        .parametrs label {
+            display: flex;
+            align-items: center;
+            width: 33vw;
+        }
+
+        .view {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .view-head h1 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .messages-container {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+            max-width: 100%;
+        }
+
+        .sent {
+            background-color: #d1f7d1;
+            align-self: flex-end;
+            text-align: right;
+        }
+
+        .received {
+            background-color: #f1f1f1;
+            align-self: flex-start;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .message-input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 15px;
+            border: 1px solid #ccc;
+        }
+
+        .send-button {
+            padding: 10px 20px;
+            background-color: {{ settings.input_color | default('#007bff') }};
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+
+        #logo-url {
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            padding: 10px;
+            height: 2vw;
+            margin: 0 auto;
+            max-width: 31vw;
+        }
+
+        .chat-name-input {
+            max-width: 49vw;
+            width: 100%;
+            height: 3.5vw;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .file-form {
+            max-width:53vw;
+            width:100%;
+        }
+
+        .url-input {
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            padding: 10px;
+            max-width: 14vw;
+            width:100%;
+            height: 2vw;
+        }
+
+        .file-form button {
+            font-size: 1.5vw;
+    max-width: 15.5vw;
+    /* margin: 0 auto; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    height: 3.5vw;
+        }
+
+        .log-in {
+            max-width: 50vw;
+            display: flex;
+            align-items:center;
+            justify-content:space-between;
+            height: 4vw;
+        }
+
+        .log-in input {
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            height: 55%;
+        }
+    </style>
+</head>
+<!-- chat.html -->
+<body>
+<nav class="nav container">
+        <div class="nav-links">
+            <a href="{{ url_for('home') }}" class="logo">Окно знаний</a>
+                <form action="/create_chat" method="post" style="display: inline;">
+                    <button class="btn" type="submit">Создать чат</button>
+                </form>
+        </div>
+</nav>
+    {% if admin_access %}
+
+
+        <div id="style-editor">
+            <h3>Настройки чата</h3>
+            <div id="chat-header">
+                <img id="chat-logo" src="{{ settings.logo_url | default('/default-logo.png') }}" alt="Логотип">
+                <div class="chat-name-input">
+                <input type="text" id="chat-title" value="{{ settings.chat_name }}">
+                <button type="button" class="btn" style="cursor:pointer;" onclick="saveChatName()">Сохранить название чата</button>
+                </div>
+            </div>
+            <div class="parametrs">
+            <label for="header-color">Цвет хедера:</label>
+            <input type="color" id="header-color" value="{{ settings.header_color | default('#007bff') }}"><br>
+            </div>
+            <div class="parametrs">
+            <label for="input-color">Цвет полей ввода:</label>
+            <input type="color" id="input-color" value="{{ settings.input_color | default('#ffffff') }}"><br>
+            </div>
+                <div class="parametrs">
+            <label for="bg-color">Цвет фона:</label>
+            <input type="color" id="bg-color" value="{{ settings.bg_color | default('#ffffff') }}"><br>
+            </div>
+            <div class="parametrs">
+            <label for="logo-url">Ссылка на логотип(Enter для выбора):</label>
+            <input type="text" id="logo-url" value="{{ settings.logo_url | default('/default-logo.png') }}"><br>
+                </div>
+            <div class="parametrs">
+            <label for="font-upload">Загрузить шрифт (TTF):</label>
+            <input type="file" id="font-upload" accept=".ttf" class="file-input"><br>
+                </div>
+
+            <div id="upload-form">
+            <form action="/chat/{{ chat_id }}/upload" method="post" enctype="multipart/form-data" class="file-form">
+                <div class="parametrs">
+                <label for="file">Загрузить файл:</label>
+                <input type="file" name="file" accept=".txt,.pdf,.docx" class="file-input">
+                    </div>
+
+                <div class="parametrs" style="column-gap: 20px;">
+                <label for="url">Или введите URL:</label>
+                <input type="url" name="url" id="url" placeholder="https://example.com" class="url-input">
+                    <button type="submit" class="btn">Загрузить</button>
+                    </div>
+
+
+
+            </form>
+        </div>
+
+        </div>
+
+        <!-- Форма для загрузки данных -->
+<h2>Предварительный результат</h2>
+    {% else %}
+        <form method="post" class="log-in">
+            <label for="admin_key">Введите ключ администратора:</label>
+            <input type="text" id="admin_key" name="admin_key">
+            <button type="submit" class="btn">Войти</button>
+        </form>
+        {% if admin_error %}
+            <p style="color: red;">Неверный ключ администратора.</p>
+        {% endif %}
+    {% endif %}
+
+    <div class="view">
+
+        <div class="view-wrapp">
+            <div class="view-head" id="chat-head">
+                <h1 id="chat-title-view">{{ settings.chat_name }}</h1>
+            </div>
+            <div class="messages-container" id="chat-history"></div>
+            <div class="input-container">
+                <input type="text" id="question" placeholder="Введите ваше сообщение..." class="message-input" />
+                <button class="send-button" onclick="askQuestion()">Отправить</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="response" style="display:none;"></div>
+
+    <script>
+        // Сохранить название чата
+        async function saveChatName() {
+            const chatName = document.getElementById('chat-title').value;
+
+            const response = await fetch(`/chat/{{ chat_id }}/update_name`, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ chatName })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById('chat-name').innerText = data.chatName;
+                document.getElementById('chat-title-view').innerText = data.chatName;
+                alert('Название чата сохранено: ' + data.chatName);
+            } else {
+                alert("Ошибка при сохранении названия чата.");
+            }
+        }
+
+        // Обработчики изменения настроек
+        document.getElementById('header-color').addEventListener('input', function() {
+            document.getElementById('chat-head').style.backgroundColor = this.value;
+            saveSettings();
+        });
+
+        document.getElementById('input-color').addEventListener('input', function() {
+            document.querySelector('.message-input').style.backgroundColor = this.value;
+            saveSettings();
+        });
+
+        document.getElementById('bg-color').addEventListener('input', function() {
+            document.getElementById('chat-history').style.backgroundColor = this.value;
+            saveSettings();
+        });
+
+        document.getElementById('logo-url').addEventListener('input', function() {
+            document.getElementById('chat-logo').src = this.value;
+            saveSettings();
+        });
+
+        document.getElementById('public-toggle').addEventListener('change', function() {
+            saveSettings();
+        });
+
+        // Функция сохранения настроек
+        async function saveSettings() {
+            console.log("Сохранение настроек...");
+            const settings = {
+                headerColor: document.getElementById('header-color').value,
+                inputColor: document.getElementById('input-color').value,
+                bgColor: document.getElementById('bg-color').value,
+                logoUrl: document.getElementById('logo-url').value,
+                public: document.getElementById('public-toggle') ? document.getElementById('public-toggle').checked : false,
+                chatName: document.getElementById('chat-title').value
+            };
+
+            try {
+                const response = await fetch(`/chat/{{ chat_id }}/settings`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(settings)
+                });
+
+                if (!response.ok) throw new Error("Ошибка при сохранении настроек.");
+                console.log("Настройки успешно сохранены.");
+            } catch (error) {
+                console.error(error);
+                alert(error.message);
+            }
+        }
+
+        async function askQuestion() {
+            const question = document.getElementById("question").value;
+
+            try {
+                const response = await fetch(`/chat/{{ chat_id }}/ask`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ question }),
+                });
+
+                if (!response.ok) throw new Error("Ошибка при отправке вопроса.");
+
+                const data = await response.json();
+                document.getElementById("response").innerText = data.answer || data.error;
+                updateChatHistory(question, data.answer || data.error);
+            } catch (error) {
+                console.error(error);
+                alert(error.message);
+            }
+        }
+
+        function updateChatHistory(userMessage, botMessage) {
+            const chatHistory = document.getElementById('chat-history');
+            const userDiv = document.createElement('div');
+            userDiv.className = 'message sent';
+            userDiv.innerText = userMessage;
+            chatHistory.appendChild(userDiv);
+
+            const botDiv = document.createElement('div');
+            botDiv.className = 'message received';
+            botDiv.innerText = botMessage;
+            chatHistory.appendChild(botDiv);
+
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,344 @@
+@font-face {
+    font-family: 'Roboto';
+    src: url('fonts/Roboto-Regular.ttf');
+}
+
+:root {
+    --btn-color: #00aae6;
+}
+
+html {
+    padding: 0;
+    margin: 0;   
+}
+
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Roboto;
+}
+
+h1 {
+    font-size: 1.5vw;
+}
+
+h2 {
+    font-size: 1.3vw;
+}
+
+h3 {
+    font-size: 1vw;
+}
+
+p {
+    font-size: 1vw;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+    font-size: 1.5vw;
+    text-align: center;
+    cursor: pointer;
+}
+
+.logo {
+    color: var(--btn-color);
+}
+
+button {
+    font-family: 'Roboto';
+}
+
+.container {
+    max-width: 95vw;
+    width: 100%;
+    padding: 10px;
+    margin: 0 auto;
+}
+
+.nav {
+    width: 100%;
+}
+
+.nav-auth {
+    max-width: 45vw;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.btn {
+    border: none;
+    max-width: 12vw;
+    width: 100%;
+    border-radius: 15px;
+    background-color: var(--btn-color);
+    padding: 10px;
+    color: white;
+    font-size: 1vw;
+}
+
+.person-chats {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(20vw, 1fr));
+    row-gap: 20px; /* Отступы между карточками */
+    margin-top:20px;
+    margin-bottom: 20px;
+}
+
+.chat-wrapp {
+    width: 20vw;
+    display: block;
+    text-align:left;
+}
+
+.chat {
+    max-width: 20vw;
+    height: auto;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    border-radius: 15px;
+}
+
+.chat:hover {
+    transform: scale(1.07); /* Увеличение элемента */
+    background-color: rgba(0, 0, 0, 0.319);
+}
+
+.chat-image {
+    width: 100%;
+    height: 200px;
+    background-image: url('img/robot.jfif');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    border-radius: 15px 15px 0 0;
+}
+
+.chat-image img {
+    width: 100%;
+    height: 100%;
+    border-radius: 15px 15px 0 0;
+}
+
+.chat-text {
+    padding: 36px 45px 41px 45px;
+    background-color: #d1d1d1;
+    border-radius: 0 0 15px 15px;
+    height: auto;
+}
+
+.edit {
+    padding-top: 20px;
+}
+
+.label {
+    display: inline-block;
+    position: relative;
+    width: 20vw;
+    height: 150px;
+    cursor: pointer;
+    overflow: hidden;
+  }
+  
+  input[type="color"] {
+    -webkit-appearance: none;
+    border: none;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    outline: none;
+    cursor: inherit;
+  }
+  
+  .circle {
+    position: absolute;
+    left: 30px;
+    top: 30px;
+    width: 90px;
+    height: 90px;
+    background-color: white;
+    border-radius: 50%;
+    cursor: inherit;
+  }
+  
+  /* -webkit */
+  input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;    
+  }
+  
+  input[type="color"]::-webkit-color-swatch {
+    border: none;  
+    border-radius: 50%;
+  }
+  
+  
+  /* firefox */
+  input[type=color]::-moz-focus-inner {
+    border: none;
+    padding: 0;
+    border-radius: 50%;
+  }
+  
+  input[type=color]::-moz-color-swatch {
+    border: none;
+    border-radius: 50%;
+    height: 140px;
+  }
+
+.parametrs {
+    display: flex;
+    align-items: center;
+    max-width: 53vw;
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+input[type=file] {
+    width: 20vw;
+}
+
+input[type=text] {
+    width: 20vw;
+}
+
+.name-input {
+    border-radius: 15px;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.view-head {
+    height: 100px;
+    background: #28dbd4b5;
+    border-radius: 15px 15px 0 0;
+    padding: 45px;
+    display: flex;
+    align-items: center;
+}
+
+.view-body {
+    height: auto;
+    display: flex;
+    flex-direction: column; /* Вертикальное расположение элементов */
+}
+
+.messages-container {
+    flex-grow: 1; /* Позволяет контейнеру занимать доступное пространство */
+    overflow-y: auto; /* Добавляет прокрутку при переполнении */
+    padding: 10px;
+    border: 1px solid #ccc; /* Граница вокруг области сообщений */
+    border-radius: 0 0 15px 15px; /* Скругление нижних углов */
+    background-color: #f9f9f9; /* Цвет фона для области сообщений */
+    height: 500px;
+}
+
+.message {
+    margin-bottom: 10px; /* Отступ между сообщениями */
+    padding: 10px;
+    border-radius: 10px; /* Скругление углов сообщения */
+}
+
+.sent {
+    background-color: #d1e7dd; /* Цвет фона для отправленного сообщения */
+    align-self: flex-end; /* Выравнивание по правому краю */
+}
+
+.received {
+    background-color: #f8d7da; /* Цвет фона для полученного сообщения */
+    align-self: flex-start; /* Выравнивание по левому краю */
+}
+
+.input-container {
+    display: flex;
+    align-items: center; /* Выравнивание по центру по вертикали */
+    margin-top: 10px; /* Отступ сверху для поля ввода */
+}
+
+.message-input {
+    flex-grow: 1; /* Поле ввода занимает доступное пространство */
+    padding: 10px;
+    border-radius: 15px;
+    border: 1px solid #ccc;
+}
+
+.send-button {
+    margin-left: 10px; /* Отступ между полем ввода и кнопкой */
+    padding: 10px 15px;
+    border-radius: 15px;
+    background-color: #00aae6 !important; /* Цвет кнопки отправки */
+    color: white;
+    border: none;
+}
+
+
+.modal {
+    display: none; /* Скрыто по умолчанию */
+    position: fixed; /* Оверлей на весь экран */
+    z-index: 1000; /* Поверх других элементов */
+    left: 0;
+    top: 0;
+    width: 100%; /* Полная ширина */
+    height: 100%; /* Полная высота */
+    overflow: auto; /* Прокрутка при необходимости */
+    background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный фон */
+}
+
+.modal-content {
+    background-color: #fefefe; /* Цвет фона модального окна */
+    margin: 15% auto; /* Отступ сверху и центрирование */
+    padding: 50px;
+    border: 1px solid #888; /* Граница вокруг модального окна */
+    width: 90%; /* Ширина модального окна */
+    max-width: 400px; /* Максимальная ширина */
+    border-radius: 10px; /* Скругление углов */
+}
+
+.close-button {
+    color: #aaa; /* Цвет кнопки закрытия */
+    float: right; /* Выравнивание вправо */
+    font-size: 28px; /* Размер шрифта кнопки закрытия */
+    font-weight: bold; /* Жирный шрифт */
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black; /* Цвет при наведении */
+    text-decoration: none; /* Убираем подчеркивание */
+    cursor: pointer; /* Указатель при наведении */
+}
+
+.display {
+    display: flex;
+    justify-content: space-between;
+    row-gap: 40px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.display input {
+    width: 15vw;
+    border-radius: 15px;
+    padding: 10px;
+    border: 1px solid rgb(91, 90, 90);
+}
+
+
+form button {
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+}

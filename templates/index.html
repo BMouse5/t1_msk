@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Окно знаний</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+
+    <!-- Навигация -->
+    <nav class="nav container">
+        <div class="nav-links">
+            <a href="{{ url_for('home') }}" class="logo">Окно знаний</a>
+                <form action="/create_chat" method="post" style="display: inline;">
+                    <button class="btn" type="submit">Создать чат</button>
+                </form>
+        </div>
+    </nav>
+
+    <!-- Основной контент -->
+    <main class="main container">
+        <h1>Все чаты</h1>
+        <hr/>
+        <div class="person-chats">
+            {% for chat in chats %}
+            <a href="{{ url_for('chat', chat_id=chat.chat_id) }}" class="chat-wrapp">
+                <div class="chat">
+                    <div class="chat-image">
+                        <img src="{{ chat.logo_url }}" alt="Логотип">
+                    </div>
+                    <div class="chat-text">
+                        <h2>{{ chat.chat_name }}</h2>
+                        <p>Чат с базой знаний</p>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+
+    </main>
+
+    <!-- Подключение JavaScript -->
+    <script src="{{ url_for('static', filename='js/script.js') }}">
+
+    </script>
+</body>
+</html>
